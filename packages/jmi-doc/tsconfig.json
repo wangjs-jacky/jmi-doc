@@ -1,0 +1,32 @@
+{
+  /* ==== 识别的路径 ===== */
+  "include": [
+    "./**/*.d.ts",
+    "./**/*.ts",
+    "./**/*.tsx"
+  ],
+  "exclude": [],
+  "compilerOptions": {
+    "module": "nodenext",
+    "esModuleInterop": true,
+    "moduleResolution": "NodeNext",
+    "allowSyntheticDefaultImports": true,
+    "target": "esnext",
+    /* ==== extends 继承基础配置 =====*/
+    // "extends": "./configs/base",
+    /* ==== 基本配置 ===== */
+    "rootDir": "src",
+    // "rootDirs": ["src/views", "generated/templates/views"], /* 将 ts 的内容进行展平，配置后直接以基准 */
+    "jsx": "react-jsx",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    /* ==== Type Check =====*/
+    "strict": true, /* 开启严格模式 */
+    "noImplicitAny": true, /* 非隐式 any  */
+    /* ==== 声明文件 ===== */
+    "skipLibCheck": true, /* 跳过对 .d.ts 文件的类型检查 */
+  },
+}
