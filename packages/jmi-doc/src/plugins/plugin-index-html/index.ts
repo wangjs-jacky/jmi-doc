@@ -8,17 +8,23 @@ export const pluginIndexHtml = (): Plugin => {
     apply: 'serve',
     /* configureServer的配置： https://cn.vitejs.dev/guide/api-plugin.html#configurepreviewserver */
     configureServer(server) {
-      server.middlewares.use(async (req, res, next) => {
-        /* 读取当前工程文件夹下的 template.html */
-        let html = await readFile(DEFAULT_HTML_PATH, 'utf-8')
-
-        try {
-          res.writeHead(200, { 'Content-Type': 'text/html' })
-          res.end(html)
-        } catch (error) {
-          next(error)
-        }
-      })
+      return () => {
+        server.middlewares.use(async (req, res, next) => {
+          /* 读取当前工程文件夹下的 template.html */
+          let html = await readFile(DEFAULT_HTML_PATH, 'utf-8');
+          console.log(req.url);
+          
+          if (req.url === '/index.html') {
+            try {
+              res.statusCode = 200;
+              res.setHeader("Content-Type", "text/html");
+              res.end(html)
+            } catch (error) {
+              next(error)
+            }
+          }
+        })
+      }
     }
   }
 }

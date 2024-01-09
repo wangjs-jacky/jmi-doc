@@ -2,7 +2,6 @@ import { cac } from "cac";
 import { createDevServer } from "./dev.js";
 /* 手动构造 require 处理 */
 import { createRequire } from 'module';
-import { join } from "path";
 
 const require = createRequire(import.meta.url);
 const version = require("../../package.json").version;
@@ -13,7 +12,7 @@ cli
   .action(async (docs: string, options: any = {}) => {
     // 执行启动服务器的逻辑
     console.log("触发启动", docs);
-    const server = await createDevServer();
+    const server = await createDevServer(docs);
     await server.listen();
     server.printUrls();
   })
