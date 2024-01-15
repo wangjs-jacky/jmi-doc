@@ -2,6 +2,9 @@ import { cac } from "cac";
 import { createDevServer } from "./dev.js";
 /* 手动构造 require 处理 */
 import { createRequire } from 'module';
+import { build } from "./build.js";
+import { renderPage } from "./renderPage.js";
+import { join } from "path";
 
 const require = createRequire(import.meta.url);
 const version = require("../../package.json").version;
@@ -12,7 +15,7 @@ cli
   .example("jmi-doc dev docs")
   .action(async (docs: string, options: any = {}) => {
     // 执行启动服务器的逻辑
-    if(!docs){
+    if (!docs) {
       cli.outputHelp();
       return;
     }
@@ -24,12 +27,21 @@ cli
 cli
   .command("build <docs>", "构建服务器")
   .example("jmi-doc build docs")
-  .action((docs: string, options: any = {}) => {
+  .action(async (docs: string, options: any = {}) => {
     // 执行启动服务器的逻辑
     console.log("触发构建任务", docs);
-    if(!docs){
+    if (!docs) {
       cli.outputHelp();
       return;
+    }
+
+    try {
+      const [clientBundle] = await build(docs);
+      // clientBundle 格式化规范 cjs 使用 require 方式导入
+      const { render } = require(join(process.cwd(), docs, '.temp', 'ssr-entry.js'));
+      await renderPage(render, clientBundle, docs);
+    } catch (error) {
+      console.log(error);
     }
   })
 
